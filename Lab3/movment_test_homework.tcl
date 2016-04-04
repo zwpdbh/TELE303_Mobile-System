@@ -9,18 +9,18 @@
  set val(ifqlen)       50                       ;# max packet in ifq
  set val(netif)        Phy/WirelessPhy          ;# network interface type
  set val(mac)          Mac/802_11               ;# MAC type
- set val(nn)           6                        ;# number of mobilenodes
+ set val(nn)           2                        ;# number of mobilenodes
  set val(rp)           AODV             ;# routing protocol
- set val(x)            1200
- set val(y)            1200
+ set val(x)            500
+ set val(y)            500
 
 set ns [new Simulator]
 ns-random 7
 
-# Then setup trace support by opening file 1_out.tr and call the procedure trace-all {} as follows:
-set f [open 1_out.tr w]
+# Then setup trace support by opening file movement_out.tr and call the procedure trace-all {} as follows:
+set f [open movement_out.tr w]
 $ns trace-all $f
-set namtrace [open 1_out.nam w]
+set namtrace [open movement_out.nam w]
 $ns namtrace-all-wireless $namtrace $val(x) $val(y)
 set f0 [open proj_out0.tr w]
 set f1 [open proj_out1.tr w]
@@ -56,7 +56,7 @@ proc finish {} {
         close $namtrace   
     close $f0
         close $f1
-        exec nam -r 5m 1_out.nam &
+        exec nam -r 5m movement_out.nam &
     exit 0
 }
 
@@ -76,25 +76,10 @@ set n(0) [$ns node]
 $n(0) color "0"
 $n(0) shape "circle"
 
+
 set n(1) [$ns node]
 $n(1) color "blue"
 $n(1) shape "circle"
-
-set n(2) [$ns node]
-$n(2) color "blue"
-$n(2) shape "circle"
-
-set n(3) [$ns node]
-$n(3) color "blue"
-$n(3) shape "circle"
-
-set n(4) [$ns node]
-$n(4) color "blue"
-$n(4) shape "circle"
-
-set n(5) [$ns node]
-$n(5) color "blue"
-$n(5) shape "circle"
 
 # set node size
 for {set i 0} {$i < $val(nn)} {incr i} {
@@ -106,55 +91,29 @@ $n(0) set X_ 100.0
 $n(0) set Y_ 100.0
 $n(0) set Z_ 0.0
 
-$n(1) set X_ 300.0
-$n(1) set Y_ 200.0
+
+
+$n(1) set X_ 200.0
+$n(1) set Y_ 100.0
 $n(1) set Z_ 0.0
-
-$n(2) set X_ 500.0
-$n(2) set Y_ 200.0
-$n(2) set Z_ 0.0
-
-$n(3) set X_ 700.0
-$n(3) set Y_ 200.0
-$n(3) set Z_ 0.0
-
-$n(4) set X_ 900.0
-$n(4) set Y_ 200.0
-$n(4) set Z_ 0.0
-
-$n(5) set X_ 100.0
-$n(5) set Y_ 100.0
-$n(5) set Z_ 0.0
 
 # set motions
 $ns at 0.0 "$n(0) setdest 100.0 100.0 2000.0"
+$ns at 0.0 "$n(1) setdest 250.0 100.0 2000.0"
 
-$ns at 0.0 "$n(1) setdest 300.0 410.0 2000.0"
-$ns at 0.0 "$n(2) setdest 500.0 410.0 2000.0"
-$ns at 0.0 "$n(3) setdest 700.0 410.0 2000.0"
-$ns at 0.0 "$n(4) setdest 900.0 410.0 2000.0"
-
-$ns at 0.0 "$n(5) setdest 310.0 100.0 2000.0"
-
-# node5 movement
-$ns at 3.0 "$n(5) setdest 500.0 100.0 200.0"
-$ns at 5.0 "$n(5) setdest 700.0 100.0 200.0"
-$ns at 7.0 "$n(5) setdest 900.0 100.0 200.0"
-$ns at 9.0 "$n(5) setdest 1100.0 100.0 200.0"
-
-# node1, 2, 3, 4 movement
-$ns at 3.0 "$n(1) setdest 300.0 100.0 200.0"
-$ns at 5.0 "$n(2) setdest 500.0 100.0 200.0"
-$ns at 7.0 "$n(3) setdest 700.0 100.0 200.0"
-$ns at 9.0 "$n(4) setdest 900.0 100.0 200.0"
+# node1 movement
+$ns at 1.0 "$n(1) setdest 300.0 200.0 800.0"
+$ns at 2.0 "$n(1) setdest 300.0 100.0 3200.0"
+$ns at 3.0 "$n(1) setdest 300.0 200.0 800.0"
+$ns at 4.0 "$n(1) setdest 300.0 100.0 3200.0"
 
 
 #setup TCP agents:
 set tcp [new Agent/TCP]
 set sink [new Agent/TCPSink]
 #Attach the agents to NODES
-$ns attach-agent $n0 $tcp
-$ns attach-agent $n5 $sink
+$ns attach-agent $n(0) $tcp
+$ns attach-agent $n(1) $sink
 #Set out connection between agents
 $ns connect $tcp $sink
 
@@ -164,6 +123,7 @@ $ftp attach-agent $tcp
 #Start the application traffic 
 $ns at 0.3 "$ftp start"
 
+$ns at 6.0 "finish"
 
 puts "Start of simulation.."
 $ns run
