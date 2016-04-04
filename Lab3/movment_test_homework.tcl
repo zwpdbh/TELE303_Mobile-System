@@ -93,19 +93,25 @@ $n(0) set Z_ 0.0
 
 
 
-$n(1) set X_ 200.0
+$n(1) set X_ 150.0
 $n(1) set Y_ 100.0
 $n(1) set Z_ 0.0
 
 # set motions
 $ns at 0.0 "$n(0) setdest 100.0 100.0 2000.0"
-$ns at 0.0 "$n(1) setdest 250.0 100.0 2000.0"
+$ns at 0.0 "$n(1) setdest 150.0 100.0 2000.0"
 
 # node1 movement
-$ns at 1.0 "$n(1) setdest 300.0 200.0 800.0"
-$ns at 2.0 "$n(1) setdest 300.0 100.0 3200.0"
-$ns at 3.0 "$n(1) setdest 300.0 200.0 800.0"
-$ns at 4.0 "$n(1) setdest 300.0 100.0 3200.0"
+$ns at 2.0 "$n(1) setdest 350.0 100.0 200.0"
+$ns at 4.0 "$n(1) setdest 150.0 100.0 200.0"
+
+# movement vertically
+$ns at 6.0 "$n(1) setdest 150.0 300.0 200.0"
+$ns at 8.0 "$n(1) setdest 150.0 100.0 200.0"
+
+$ns at 10.0 "$n(1) setdest 350.0 100.0 200.0"
+
+
 
 
 #setup TCP agents:
@@ -121,9 +127,9 @@ $ns connect $tcp $sink
 set ftp [new Application/FTP]
 $ftp attach-agent $tcp
 #Start the application traffic 
-$ns at 0.3 "$ftp start"
+$ns at 1.0 "$ftp start"
 
-$ns at 6.0 "finish"
+$ns at 13.0 "finish"
 
 puts "Start of simulation.."
 $ns run
