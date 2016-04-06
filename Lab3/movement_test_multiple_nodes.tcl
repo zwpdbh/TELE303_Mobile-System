@@ -152,10 +152,10 @@ $ns at 0.0 "$n(4) setdest 500.0 300.0 2000.0"
 $ns at 0.0 "$n(6) setdest 600.0 300.0 2000.0"
 $ns at 0.0 "$n(7) setdest 700.0 300.0 2000.0"
 
-$ns at 0.0 "$n(5) setdest 100.0 200.0 2000.0"
 
+$ns at 0.0 "$n(5) setdest 100.0 200.0 2000.0"
 # node5 movement, distance: 600
-$ns at 1.0 "$n(5) setdest 700.0 200.0 10.0"
+$ns at 0.0 "$n(5) setdest 700.0 200.0 60.0"
 
 
 
@@ -172,9 +172,9 @@ $ns connect $tcp $sink
 set ftp [new Application/FTP]
 $ftp attach-agent $tcp
 #Start the application traffic 
-$ns at 1.0 "$ftp start"
+$ns at 0.0 "$ftp start"
 
-$ns at 62.0 "finish"
+$ns at 10.0 "finish"
 
 puts "Start of simulation.."
 $ns run
